@@ -40,8 +40,8 @@ export default function LoginWrapper() {
 
 
   return (
-    <><div className="flex items-center justify-center min-h-screen w-full px-4 md:px-6 py-8 bg-[#f5f6fb]">
-      <div className="w-full max-w-md bg-white p-6 md:p-8 rounded-xl shadow-lg">
+    <><div className="flex items-center justify-center  w-full px-6 md:px-6 py-8 bg-[#f5f6fb]">
+      <div className="w-full max-w-2xl bg-white p-6 md:p-8 rounded-xl shadow-lg">
         <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-[#183966]">
           Login <span className="text-gray-500 font-normal">with</span>
         </h2>

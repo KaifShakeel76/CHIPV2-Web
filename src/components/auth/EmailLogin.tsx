@@ -22,7 +22,7 @@ export default function EmailLogin() {
       return;
     }
     toast.success("Logged in successfully!");
-    console.log("🚀 Email:", email, "Password:", password);
+    console.log("Email:", email, "Password:", password);
   };
 
   return (

@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { OtpSection } from "@/components/auth/OtpSection";
 
 interface Step1VerificationProps {
@@ -57,13 +55,11 @@ export const Step1Verification = ({
   emailOtp,
   setEmailOtp,
 }: Step1VerificationProps) => {
-  const [sameAsMobile, setSameAsMobile] = useState(false);
+
 
   return (
     <div className="space-y-6">
     
-
-      {/* ✅ Mobile Verification Card */}
       
         <OtpSection
           label="Mobile Number"
@@ -71,9 +67,6 @@ export const Step1Verification = ({
           value={mobileNumber}
           onChange={(val) => {
             setMobileNumber(val);
-            if (sameAsMobile) {
-              setWhatsappNumber(val);
-            }
           }}
           verified={mobileVerified}
           setVerified={setMobileVerified}
@@ -83,8 +76,7 @@ export const Step1Verification = ({
           setOtp={setMobileOtp}
         />
 
-      {/* ✅ WhatsApp Verification Card */}
-     
+
         <OtpSection
           label="WhatsApp Number"
           type="whatsapp"
@@ -99,8 +91,6 @@ export const Step1Verification = ({
           
         />
     
-
-      {/* ✅ Email Verification Card */}
       
         <OtpSection
           label="Email ID"

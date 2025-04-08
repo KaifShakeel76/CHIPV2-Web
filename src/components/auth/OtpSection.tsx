@@ -27,6 +27,7 @@ interface OtpSectionProps {
   showSameAsMobile?: boolean;
   sameAsMobile?: boolean;
   setSameAsMobile?: (val: boolean) => void;
+  
 }
 
 export function OtpSection({

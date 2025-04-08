@@ -1,7 +1,7 @@
 // src/components/MapSection.tsx
 export function MapSection() {
     return (
-      <div className="w-full max-w-xl px-4 ">
+      <div className="w-full max-w-xl">
         <img
           src="src/assets/region-map.png"
           alt="Region Map"
@@ -13,4 +13,7 @@ export function MapSection() {
       </div>
     );
   }
+
+
+
   
