@@ -1,0 +1,455 @@
+{
+    "states": [
+      { "id": "RJ", "name": "Rajasthan" },
+      { "id": "KA", "name": "Karnataka" },
+      { "id": "MH", "name": "Maharashtra" }
+    ],
+    "divisions": [
+      { "id": "JPR", "name": "Jaipur", "stateId": "RJ" },
+      { "id": "JDP", "name": "Jodhpur", "stateId": "RJ" },
+      { "id": "UDP", "name": "Udaipur", "stateId": "RJ" },
+      { "id": "BLR", "name": "Bangalore", "stateId": "KA" },
+      { "id": "MYS", "name": "Mysore", "stateId": "KA" },
+      { "id": "HBL", "name": "Hubli", "stateId": "KA" },
+      { "id": "MUM", "name": "Mumbai", "stateId": "MH" },
+      { "id": "PUN", "name": "Pune", "stateId": "MH" },
+      { "id": "NAG", "name": "Nagpur", "stateId": "MH" }
+    ],
+    "districts": [
+      { "id": "JPR-D", "name": "Jaipur", "divisionId": "JPR" },
+      { "id": "ALW", "name": "Alwar", "divisionId": "JPR" },
+      { "id": "SKR", "name": "Sikar", "divisionId": "JPR" },
+      
+      { "id": "JDP-D", "name": "Jodhpur", "divisionId": "JDP" },
+      { "id": "BAR", "name": "Barmer", "divisionId": "JDP" },
+      { "id": "JSL", "name": "Jaisalmer", "divisionId": "JDP" },
+      
+      { "id": "UDP-D", "name": "Udaipur", "divisionId": "UDP" },
+      { "id": "BNS", "name": "Banswara", "divisionId": "UDP" },
+      { "id": "DDR", "name": "Dungarpur", "divisionId": "UDP" },
+      
+      { "id": "BLR-D", "name": "Bangalore Urban", "divisionId": "BLR" },
+      { "id": "BLR-R", "name": "Bangalore Rural", "divisionId": "BLR" },
+      { "id": "KLR", "name": "Kolar", "divisionId": "BLR" },
+      
+      { "id": "MYS-D", "name": "Mysore", "divisionId": "MYS" },
+      { "id": "MDR", "name": "Mandya", "divisionId": "MYS" },
+      { "id": "CTK", "name": "Chitradurga", "divisionId": "MYS" },
+      
+      { "id": "HBL-D", "name": "Hubli", "divisionId": "HBL" },
+      { "id": "DHR", "name": "Dharwad", "divisionId": "HBL" },
+      { "id": "GDG", "name": "Gadag", "divisionId": "HBL" },
+      
+      { "id": "MUM-D", "name": "Mumbai", "divisionId": "MUM" },
+      { "id": "THN", "name": "Thane", "divisionId": "MUM" },
+      { "id": "PLG", "name": "Palghar", "divisionId": "MUM" },
+      
+      { "id": "PUN-D", "name": "Pune", "divisionId": "PUN" },
+      { "id": "SAT", "name": "Satara", "divisionId": "PUN" },
+      { "id": "SLP", "name": "Solapur", "divisionId": "PUN" },
+      
+      { "id": "NAG-D", "name": "Nagpur", "divisionId": "NAG" },
+      { "id": "WAR", "name": "Wardha", "divisionId": "NAG" },
+      { "id": "AMR", "name": "Amravati", "divisionId": "NAG" }
+    ],
+    "blocks": [
+      { "id": "BAS", "name": "Bassi", "districtId": "JPR-D" },
+      { "id": "CHK", "name": "Chaksu", "districtId": "JPR-D" },
+      { "id": "SNG", "name": "Sanganer", "districtId": "JPR-D" },
+      
+      { "id": "ALW-B1", "name": "Alwar Central", "districtId": "ALW" },
+      { "id": "ALW-B2", "name": "Alwar North", "districtId": "ALW" },
+      
+      { "id": "SKR-B1", "name": "Sikar Central", "districtId": "SKR" },
+      { "id": "SKR-B2", "name": "Sikar East", "districtId": "SKR" },
+      
+      { "id": "MDR", "name": "Mandore", "districtId": "JDP-D" },
+      { "id": "LSN", "name": "Luni", "districtId": "JDP-D" },
+      { "id": "JDP-B3", "name": "Jodhpur Central", "districtId": "JDP-D" },
+      
+      { "id": "BAR-B1", "name": "Barmer Central", "districtId": "BAR" },
+      { "id": "BAR-B2", "name": "Barmer East", "districtId": "BAR" },
+      
+      { "id": "JSL-B1", "name": "Jaisalmer Central", "districtId": "JSL" },
+      { "id": "JSL-B2", "name": "Jaisalmer West", "districtId": "JSL" },
+      
+      { "id": "GIR", "name": "Girwa", "districtId": "UDP-D" },
+      { "id": "SLM", "name": "Salumber", "districtId": "UDP-D" },
+      { "id": "UDP-B3", "name": "Udaipur Central", "districtId": "UDP-D" },
+      
+      { "id": "BNS-B1", "name": "Banswara Central", "districtId": "BNS" },
+      { "id": "BNS-B2", "name": "Banswara North", "districtId": "BNS" },
+      
+      { "id": "DDR-B1", "name": "Dungarpur Central", "districtId": "DDR" },
+      { "id": "DDR-B2", "name": "Dungarpur South", "districtId": "DDR" },
+      
+      { "id": "HSR", "name": "HSR Layout", "districtId": "BLR-D" },
+      { "id": "IND", "name": "Indiranagar", "districtId": "BLR-D" },
+      { "id": "BLR-B3", "name": "Koramangala", "districtId": "BLR-D" },
+      
+      { "id": "YEL", "name": "Yelahanka", "districtId": "BLR-R" },
+      { "id": "DNB", "name": "Devanahalli", "districtId": "BLR-R" },
+      { "id": "BLR-R-B3", "name": "Doddaballapur", "districtId": "BLR-R" },
+      
+      { "id": "KLR-B1", "name": "Kolar Central", "districtId": "KLR" },
+      { "id": "KLR-B2", "name": "Kolar East", "districtId": "KLR" },
+      
+      { "id": "MYS-B1", "name": "Mysore Central", "districtId": "MYS-D" },
+      { "id": "MYS-B2", "name": "Mysore North", "districtId": "MYS-D" },
+      
+      { "id": "MDR-B1", "name": "Mandya Central", "districtId": "MDR" },
+      { "id": "MDR-B2", "name": "Mandya East", "districtId": "MDR" },
+      
+      { "id": "CTK-B1", "name": "Chitradurga Central", "districtId": "CTK" },
+      { "id": "CTK-B2", "name": "Chitradurga North", "districtId": "CTK" },
+      
+      { "id": "HBL-B1", "name": "Hubli Central", "districtId": "HBL-D" },
+      { "id": "HBL-B2", "name": "Hubli East", "districtId": "HBL-D" },
+      
+      { "id": "DHR-B1", "name": "Dharwad Central", "districtId": "DHR" },
+      { "id": "DHR-B2", "name": "Dharwad North", "districtId": "DHR" },
+      
+      { "id": "GDG-B1", "name": "Gadag Central", "districtId": "GDG" },
+      { "id": "GDG-B2", "name": "Gadag East", "districtId": "GDG" },
+      
+      { "id": "MUM-B1", "name": "Andheri", "districtId": "MUM-D" },
+      { "id": "MUM-B2", "name": "Bandra", "districtId": "MUM-D" },
+      { "id": "MUM-B3", "name": "Colaba", "districtId": "MUM-D" },
+      
+      { "id": "THN-B1", "name": "Thane Central", "districtId": "THN" },
+      { "id": "THN-B2", "name": "Thane East", "districtId": "THN" },
+      
+      { "id": "PLG-B1", "name": "Palghar Central", "districtId": "PLG" },
+      { "id": "PLG-B2", "name": "Palghar West", "districtId": "PLG" },
+      
+      { "id": "WAN", "name": "Wagholi", "districtId": "PUN-D" },
+      { "id": "HAD", "name": "Hadapsar", "districtId": "PUN-D" },
+      { "id": "KOT", "name": "Kothrud", "districtId": "PUN-D" },
+      
+      { "id": "KRA", "name": "Karad", "districtId": "SAT" },
+      { "id": "PAT", "name": "Patan", "districtId": "SAT" },
+      { "id": "SAT-B3", "name": "Satara Central", "districtId": "SAT" },
+      
+      { "id": "SLP-B1", "name": "Solapur Central", "districtId": "SLP" },
+      { "id": "SLP-B2", "name": "Solapur North", "districtId": "SLP" },
+      
+      { "id": "HGN", "name": "Hingna", "districtId": "NAG-D" },
+      { "id": "KRD", "name": "Kalmeshwar", "districtId": "NAG-D" },
+      { "id": "NAG-B3", "name": "Nagpur Central", "districtId": "NAG-D" },
+      
+      { "id": "WAR-B1", "name": "Wardha Central", "districtId": "WAR" },
+      { "id": "WAR-B2", "name": "Wardha East", "districtId": "WAR" },
+      
+      { "id": "AMR-B1", "name": "Amravati Central", "districtId": "AMR" },
+      { "id": "AMR-B2", "name": "Amravati North", "districtId": "AMR" }
+    ],
+    "sectors": [
+      { "id": "BAS-S1", "name": "Sector 1", "blockId": "BAS" },
+      { "id": "BAS-S2", "name": "Sector 2", "blockId": "BAS" },
+      { "id": "BAS-S3", "name": "Sector 3", "blockId": "BAS" },
+      
+      { "id": "CHK-S1", "name": "Sector 1", "blockId": "CHK" },
+      { "id": "CHK-S2", "name": "Sector 2", "blockId": "CHK" },
+      
+      { "id": "SNG-S1", "name": "Sector 1", "blockId": "SNG" },
+      { "id": "SNG-S2", "name": "Sector 2", "blockId": "SNG" },
+      
+      { "id": "ALW-B1-S1", "name": "Sector 1", "blockId": "ALW-B1" },
+      { "id": "ALW-B1-S2", "name": "Sector 2", "blockId": "ALW-B1" },
+      
+      { "id": "ALW-B2-S1", "name": "Sector 1", "blockId": "ALW-B2" },
+      { "id": "ALW-B2-S2", "name": "Sector 2", "blockId": "ALW-B2" },
+      
+      { "id": "SKR-B1-S1", "name": "Sector 1", "blockId": "SKR-B1" },
+      { "id": "SKR-B1-S2", "name": "Sector 2", "blockId": "SKR-B1" },
+      
+      { "id": "SKR-B2-S1", "name": "Sector 1", "blockId": "SKR-B2" },
+      { "id": "SKR-B2-S2", "name": "Sector 2", "blockId": "SKR-B2" },
+      
+      { "id": "MDR-S1", "name": "Sector 1", "blockId": "MDR" },
+      { "id": "MDR-S2", "name": "Sector 2", "blockId": "MDR" },
+      
+      { "id": "LSN-S1", "name": "Sector 1", "blockId": "LSN" },
+      { "id": "LSN-S2", "name": "Sector 2", "blockId": "LSN" },
+      
+      { "id": "JDP-B3-S1", "name": "Sector 1", "blockId": "JDP-B3" },
+      { "id": "JDP-B3-S2", "name": "Sector 2", "blockId": "JDP-B3" },
+      
+      { "id": "BAR-B1-S1", "name": "Sector 1", "blockId": "BAR-B1" },
+      { "id": "BAR-B1-S2", "name": "Sector 2", "blockId": "BAR-B1" },
+      
+      { "id": "BAR-B2-S1", "name": "Sector 1", "blockId": "BAR-B2" },
+      { "id": "BAR-B2-S2", "name": "Sector 2", "blockId": "BAR-B2" },
+      
+      { "id": "JSL-B1-S1", "name": "Sector 1", "blockId": "JSL-B1" },
+      { "id": "JSL-B1-S2", "name": "Sector 2", "blockId": "JSL-B1" },
+      
+      { "id": "JSL-B2-S1", "name": "Sector 1", "blockId": "JSL-B2" },
+      { "id": "JSL-B2-S2", "name": "Sector 2", "blockId": "JSL-B2" },
+      
+      { "id": "GIR-S1", "name": "Sector 1", "blockId": "GIR" },
+      { "id": "GIR-S2", "name": "Sector 2", "blockId": "GIR" },
+      
+      { "id": "SLM-S1", "name": "Sector 1", "blockId": "SLM" },
+      { "id": "SLM-S2", "name": "Sector 2", "blockId": "SLM" },
+      
+      { "id": "UDP-B3-S1", "name": "Sector 1", "blockId": "UDP-B3" },
+      { "id": "UDP-B3-S2", "name": "Sector 2", "blockId": "UDP-B3" },
+      
+      { "id": "BNS-B1-S1", "name": "Sector 1", "blockId": "BNS-B1" },
+      { "id": "BNS-B1-S2", "name": "Sector 2", "blockId": "BNS-B1" },
+      
+      { "id": "BNS-B2-S1", "name": "Sector 1", "blockId": "BNS-B2" },
+      { "id": "BNS-B2-S2", "name": "Sector 2", "blockId": "BNS-B2" },
+      
+      { "id": "DDR-B1-S1", "name": "Sector 1", "blockId": "DDR-B1" },
+      { "id": "DDR-B1-S2", "name": "Sector 2", "blockId": "DDR-B1" },
+      
+      { "id": "DDR-B2-S1", "name": "Sector 1", "blockId": "DDR-B2" },
+      { "id": "DDR-B2-S2", "name": "Sector 2", "blockId": "DDR-B2" },
+      
+      { "id": "HSR-S1", "name": "Sector 1", "blockId": "HSR" },
+      { "id": "HSR-S2", "name": "Sector 2", "blockId": "HSR" },
+      
+      { "id": "IND-S1", "name": "Sector 1", "blockId": "IND" },
+      { "id": "IND-S2", "name": "Sector 2", "blockId": "IND" },
+      
+      { "id": "BLR-B3-S1", "name": "Sector 1", "blockId": "BLR-B3" },
+      { "id": "BLR-B3-S2", "name": "Sector 2", "blockId": "BLR-B3" },
+      
+      { "id": "YEL-S1", "name": "Sector A", "blockId": "YEL" },
+      { "id": "YEL-S2", "name": "Sector B", "blockId": "YEL" },
+      
+      { "id": "DNB-S1", "name": "Sector 1", "blockId": "DNB" },
+      { "id": "DNB-S2", "name": "Sector 2", "blockId": "DNB" },
+      
+      { "id": "BLR-R-B3-S1", "name": "Sector 1", "blockId": "BLR-R-B3" },
+      { "id": "BLR-R-B3-S2", "name": "Sector 2", "blockId": "BLR-R-B3" },
+      
+      { "id": "KLR-B1-S1", "name": "Sector 1", "blockId": "KLR-B1" },
+      { "id": "KLR-B1-S2", "name": "Sector 2", "blockId": "KLR-B1" },
+      
+      { "id": "KLR-B2-S1", "name": "Sector 1", "blockId": "KLR-B2" },
+      { "id": "KLR-B2-S2", "name": "Sector 2", "blockId": "KLR-B2" },
+      
+      { "id": "MYS-B1-S1", "name": "Sector 1", "blockId": "MYS-B1" },
+      { "id": "MYS-B1-S2", "name": "Sector 2", "blockId": "MYS-B1" },
+      
+      { "id": "MYS-B2-S1", "name": "Sector 1", "blockId": "MYS-B2" },
+      { "id": "MYS-B2-S2", "name": "Sector 2", "blockId": "MYS-B2" },
+      
+      { "id": "MDR-B1-S1", "name": "Sector 1", "blockId": "MDR-B1" },
+      { "id": "MDR-B1-S2", "name": "Sector 2", "blockId": "MDR-B1" },
+      
+      { "id": "MDR-B2-S1", "name": "Sector 1", "blockId": "MDR-B2" },
+      { "id": "MDR-B2-S2", "name": "Sector 2", "blockId": "MDR-B2" },
+      
+      { "id": "CTK-B1-S1", "name": "Sector 1", "blockId": "CTK-B1" },
+      { "id": "CTK-B1-S2", "name": "Sector 2", "blockId": "CTK-B1" },
+      
+      { "id": "CTK-B2-S1", "name": "Sector 1", "blockId": "CTK-B2" },
+      { "id": "CTK-B2-S2", "name": "Sector 2", "blockId": "CTK-B2" },
+      
+      { "id": "HBL-B1-S1", "name": "Sector 1", "blockId": "HBL-B1" },
+      { "id": "HBL-B1-S2", "name": "Sector 2", "blockId": "HBL-B1" },
+      
+      { "id": "HBL-B2-S1", "name": "Sector 1", "blockId": "HBL-B2" },
+      { "id": "HBL-B2-S2", "name": "Sector 2", "blockId": "HBL-B2" },
+      
+      { "id": "DHR-B1-S1", "name": "Sector 1", "blockId": "DHR-B1" },
+      { "id": "DHR-B1-S2", "name": "Sector 2", "blockId": "DHR-B1" },
+      
+      { "id": "DHR-B2-S1", "name": "Sector 1", "blockId": "DHR-B2" },
+      { "id": "DHR-B2-S2", "name": "Sector 2", "blockId": "DHR-B2" },
+      
+      { "id": "GDG-B1-S1", "name": "Sector 1", "blockId": "GDG-B1" },
+      { "id": "GDG-B1-S2", "name": "Sector 2", "blockId": "GDG-B1" },
+      
+      { "id": "GDG-B2-S1", "name": "Sector 1", "blockId": "GDG-B2" },
+      { "id": "GDG-B2-S2", "name": "Sector 2", "blockId": "GDG-B2" },
+      
+      { "id": "MUM-B1-S1", "name": "Sector 1", "blockId": "MUM-B1" },
+      { "id": "MUM-B1-S2", "name": "Sector 2", "blockId": "MUM-B1" },
+      
+      { "id": "MUM-B2-S1", "name": "Sector 1", "blockId": "MUM-B2" },
+      { "id": "MUM-B2-S2", "name": "Sector 2", "blockId": "MUM-B2" },
+      
+      { "id": "MUM-B3-S1", "name": "Sector 1", "blockId": "MUM-B3" },
+      { "id": "MUM-B3-S2", "name": "Sector 2", "blockId": "MUM-B3" },
+      
+      { "id": "THN-B1-S1", "name": "Sector 1", "blockId": "THN-B1" },
+      { "id": "THN-B1-S2", "name": "Sector 2", "blockId": "THN-B1" },
+      
+      { "id": "THN-B2-S1", "name": "Sector 1", "blockId": "THN-B2" },
+      { "id": "THN-B2-S2", "name": "Sector 2", "blockId": "THN-B2" },
+      
+      { "id": "PLG-B1-S1", "name": "Sector 1", "blockId": "PLG-B1" },
+      { "id": "PLG-B1-S2", "name": "Sector 2", "blockId": "PLG-B1" },
+      
+      { "id": "PLG-B2-S1", "name": "Sector 1", "blockId": "PLG-B2" },
+      { "id": "PLG-B2-S2", "name": "Sector 2", "blockId": "PLG-B2" },
+      
+      { "id": "WAN-S1", "name": "Sector 1", "blockId": "WAN" },
+      { "id": "WAN-S2", "name": "Sector 2", "blockId": "WAN" },
+      
+      { "id": "HAD-S1", "name": "Sector 1", "blockId": "HAD" },
+      { "id": "HAD-S2", "name": "Sector 2", "blockId": "HAD" },
+      
+      { "id": "KOT-S1", "name": "Sector 1", "blockId": "KOT" },
+      { "id": "KOT-S2", "name": "Sector 2", "blockId": "KOT" },
+      
+      { "id": "KRA-S1", "name": "Sector 1", "blockId": "KRA" },
+      { "id": "KRA-S2", "name": "Sector 2", "blockId": "KRA" },
+      
+      { "id": "PAT-S1", "name": "Sector 1", "blockId": "PAT" },
+      { "id": "PAT-S2", "name": "Sector 2", "blockId": "PAT" },
+      
+      { "id": "SAT-B3-S1", "name": "Sector 1", "blockId": "SAT-B3" },
+      { "id": "SAT-B3-S2", "name": "Sector 2", "blockId": "SAT-B3" },
+      
+      { "id": "SLP-B1-S1", "name": "Sector 1", "blockId": "SLP-B1" },
+      { "id": "SLP-B1-S2", "name": "Sector 2", "blockId": "SLP-B1" },
+      
+      { "id": "SLP-B2-S1", "name": "Sector 1", "blockId": "SLP-B2" },
+      { "id": "SLP-B2-S2", "name": "Sector 2", "blockId": "SLP-B2" },
+      
+      { "id": "HGN-S1", "name": "Sector 1", "blockId": "HGN" },
+      { "id": "HGN-S2", "name": "Sector 2", "blockId": "HGN" },
+      
+      { "id": "KRD-S1", "name": "Sector 1", "blockId": "KRD" },
+      { "id": "KRD-S2", "name": "Sector 2", "blockId": "KRD" },
+      
+      { "id": "NAG-B3-S1", "name": "Sector 1", "blockId": "NAG-B3" },
+      { "id": "NAG-B3-S2", "name": "Sector 2", "blockId": "NAG-B3" },
+      
+      { "id": "WAR-B1-S1", "name": "Sector 1", "blockId": "WAR-B1" },
+      { "id": "WAR-B1-S2", "name": "Sector 2", "blockId": "WAR-B1" },
+      
+      { "id": "WAR-B2-S1", "name": "Sector 1", "blockId": "WAR-B2" },
+      { "id": "WAR-B2-S2", "name": "Sector 2", "blockId": "WAR-B2" },
+      
+      { "id": "AMR-B1-S1", "name": "Sector 1", "blockId": "AMR-B1" },
+      { "id": "AMR-B1-S2", "name": "Sector 2", "blockId": "AMR-B1" },
+      
+      { "id": "AMR-B2-S1", "name": "Sector 1", "blockId": "AMR-B2" },
+      { "id": "AMR-B2-S2", "name": "Sector 2", "blockId": "AMR-B2" },
+      
+      { "id": "AMR-B1-S1", "name": "Sector 1", "blockId": "AMR-B1" },
+      { "id": "AMR-B1-S2", "name": "Sector 2", "blockId": "AMR-B1" },
+      
+      { "id": "AMR-B2-S1", "name": "Sector 1", "blockId": "AMR-B2" },
+      { "id": "AMR-B2-S2", "name": "Sector 2", "blockId": "AMR-B2" }
+    ],
+    "organizationTypes": [
+      { "id": "DMH", "name": "Director - MH", "stateId": "RJ" },
+      { "id": "DCH", "name": "Director - CH", "stateId": "RJ" },
+      { "id": "DFW", "name": "Director - FW", "stateId": "RJ" },
+      { "id": "DKH", "name": "Director - KH", "stateId": "KA" },
+      { "id": "DWH", "name": "Director - WH", "stateId": "KA" },
+      { "id": "DPH", "name": "Director - PH", "stateId": "KA" },
+      { "id": "DKH-MH", "name": "Director - KH MH", "stateId": "MH" },
+      { "id": "DPH-MH", "name": "Director - PH MH", "stateId": "MH" },
+      { "id": "DFW-MH", "name": "Director - FW MH", "stateId": "MH" }
+    ],
+    "organizations": [
+      { "id": "RJ-MH-1", "name": "Rajasthan Mental Health Institute", "orgTypeId": "DMH" },
+      { "id": "RJ-MH-2", "name": "Jaipur Psychiatric Center", "orgTypeId": "DMH" },
+
+      { "id": "RJ-CH-1", "name": "Rajasthan Child Health Foundation", "orgTypeId": "DCH" },
+      { "id": "RJ-CH-2", "name": "Child Care Specialists Jaipur", "orgTypeId": "DCH" },
+      
+      { "id": "RJ-FW-1", "name": "Rajasthan Family Welfare Department", "orgTypeId": "DFW" },
+      { "id": "RJ-FW-2", "name": "Family Planning Association RJ", "orgTypeId": "DFW" },
+      
+      { "id": "KA-KH-1", "name": "Karnataka Health Services", "orgTypeId": "DKH" },
+      { "id": "KA-KH-2", "name": "Bangalore Medical Institute", "orgTypeId": "DKH" },
+      
+      { "id": "KA-WH-1", "name": "Women's Health Initiative Karnataka", "orgTypeId": "DWH" },
+      { "id": "KA-WH-2", "name": "Maternal Care Specialists Bangalore", "orgTypeId": "DWH" },
+      
+      { "id": "KA-PH-1", "name": "Karnataka Public Health Department", "orgTypeId": "DPH" },
+      { "id": "KA-PH-2", "name": "Preventive Health Services KA", "orgTypeId": "DPH" },
+      
+      { "id": "MH-KH-1", "name": "Maharashtra Health Services", "orgTypeId": "DKH-MH" },
+      { "id": "MH-KH-2", "name": "Mumbai Medical Foundation", "orgTypeId": "DKH-MH" },
+      
+      { "id": "MH-PH-1", "name": "Maharashtra Public Health Department", "orgTypeId": "DPH-MH" },
+      { "id": "MH-PH-2", "name": "Public Health Institute Mumbai", "orgTypeId": "DPH-MH" },
+      
+      { "id": "MH-FW-1", "name": "Maharashtra Family Welfare Center", "orgTypeId": "DFW-MH" },
+      { "id": "MH-FW-2", "name": "Family Planning Services Mumbai", "orgTypeId": "DFW-MH" }
+    ],
+    "designations": [
+      { "id": "PDMH-1", "name": "Project Director - MH", "organizationId": "RJ-MH-1" },
+      { "id": "DDMH-1", "name": "Deputy Director - MH", "organizationId": "RJ-MH-1" },
+      { "id": "ADMH-1", "name": "Assistant Director - MH", "organizationId": "RJ-MH-1" },
+      
+      { "id": "PDMH-2", "name": "Project Director - MH", "organizationId": "RJ-MH-2" },
+      { "id": "DDMH-2", "name": "Deputy Director - MH", "organizationId": "RJ-MH-2" },
+      { "id": "ADMH-2", "name": "Assistant Director - MH", "organizationId": "RJ-MH-2" },
+      
+      { "id": "PDCH-1", "name": "Project Director - CH", "organizationId": "RJ-CH-1" },
+      { "id": "DDCH-1", "name": "Deputy Director - CH", "organizationId": "RJ-CH-1" },
+      { "id": "ADCH-1", "name": "Assistant Director - CH", "organizationId": "RJ-CH-1" },
+      
+      { "id": "PDCH-2", "name": "Project Director - CH", "organizationId": "RJ-CH-2" },
+      { "id": "DDCH-2", "name": "Deputy Director - CH", "organizationId": "RJ-CH-2" },
+      { "id": "ADCH-2", "name": "Assistant Director - CH", "organizationId": "RJ-CH-2" },
+      
+      { "id": "PDFW-1", "name": "Project Director - FW", "organizationId": "RJ-FW-1" },
+      { "id": "DDFW-1", "name": "Deputy Director - FW", "organizationId": "RJ-FW-1" },
+      { "id": "ADFW-1", "name": "Assistant Director - FW", "organizationId": "RJ-FW-1" },
+      
+      { "id": "PDFW-2", "name": "Project Director - FW", "organizationId": "RJ-FW-2" },
+      { "id": "DDFW-2", "name": "Deputy Director - FW", "organizationId": "RJ-FW-2" },
+      { "id": "ADFW-2", "name": "Assistant Director - FW", "organizationId": "RJ-FW-2" },
+      
+      { "id": "PDKH-1", "name": "Project Director - KH", "organizationId": "KA-KH-1" },
+      { "id": "DDKH-1", "name": "Deputy Director - KH", "organizationId": "KA-KH-1" },
+      { "id": "ADKH-1", "name": "Assistant Director - KH", "organizationId": "KA-KH-1" },
+      
+      { "id": "PDKH-2", "name": "Project Director - KH", "organizationId": "KA-KH-2" },
+      { "id": "DDKH-2", "name": "Deputy Director - KH", "organizationId": "KA-KH-2" },
+      { "id": "ADKH-2", "name": "Assistant Director - KH", "organizationId": "KA-KH-2" },
+      
+      { "id": "PDWH-1", "name": "Project Director - WH", "organizationId": "KA-WH-1" },
+      { "id": "DDWH-1", "name": "Deputy Director - WH", "organizationId": "KA-WH-1" },
+      { "id": "ADWH-1", "name": "Assistant Director - WH", "organizationId": "KA-WH-1" },
+      
+      { "id": "PDWH-2", "name": "Project Director - WH", "organizationId": "KA-WH-2" },
+      { "id": "DDWH-2", "name": "Deputy Director - WH", "organizationId": "KA-WH-2" },
+      { "id": "ADWH-2", "name": "Assistant Director - WH", "organizationId": "KA-WH-2" },
+      
+      { "id": "PDPH-1", "name": "Project Director - PH", "organizationId": "KA-PH-1" },
+      { "id": "DDPH-1", "name": "Deputy Director - PH", "organizationId": "KA-PH-1" },
+      { "id": "ADPH-1", "name": "Assistant Director - PH", "organizationId": "KA-PH-1" },
+      
+      { "id": "PDPH-2", "name": "Project Director - PH", "organizationId": "KA-PH-2" },
+      { "id": "DDPH-2", "name": "Deputy Director - PH", "organizationId": "KA-PH-2" },
+      { "id": "ADPH-2", "name": "Assistant Director - PH", "organizationId": "KA-PH-2" },
+      
+      { "id": "PDKMH-1", "name": "Project Director - KH MH", "organizationId": "MH-KH-1" },
+      { "id": "DDKMH-1", "name": "Deputy Director - KH MH", "organizationId": "MH-KH-1" },
+      { "id": "ADKMH-1", "name": "Assistant Director - KH MH", "organizationId": "MH-KH-1" },
+      
+      { "id": "PDKMH-2", "name": "Project Director - KH MH", "organizationId": "MH-KH-2" },
+      { "id": "DDKMH-2", "name": "Deputy Director - KH MH", "organizationId": "MH-KH-2" },
+      { "id": "ADKMH-2", "name": "Assistant Director - KH MH", "organizationId": "MH-KH-2" },
+      
+      { "id": "PDPMH-1", "name": "Project Director - PH MH", "organizationId": "MH-PH-1" },
+      { "id": "DDPMH-1", "name": "Deputy Director - PH MH", "organizationId": "MH-PH-1" },
+      { "id": "ADPMH-1", "name": "Assistant Director - PH MH", "organizationId": "MH-PH-1" },
+      
+      { "id": "PDPMH-2", "name": "Project Director - PH MH", "organizationId": "MH-PH-2" },
+      { "id": "DDPMH-2", "name": "Deputy Director - PH MH", "organizationId": "MH-PH-2" },
+      { "id": "ADPMH-2", "name": "Assistant Director - PH MH", "organizationId": "MH-PH-2" },
+      
+      { "id": "PDFMH-1", "name": "Project Director - FW MH", "organizationId": "MH-FW-1" },
+      { "id": "DDFMH-1", "name": "Deputy Director - FW MH", "organizationId": "MH-FW-1" },
+      { "id": "ADFMH-1", "name": "Assistant Director - FW MH", "organizationId": "MH-FW-1" },
+      
+      { "id": "PDFMH-2", "name": "Project Director - FW MH", "organizationId": "MH-FW-2" },
+      { "id": "DDFMH-2", "name": "Deputy Director - FW MH", "organizationId": "MH-FW-2" },
+      { "id": "ADFMH-2", "name": "Assistant Director - FW MH", "organizationId": "MH-FW-2" }
+    ]
+  }

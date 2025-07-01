@@ -1,54 +1,92 @@
-# React + TypeScript + Vite
+# CHIP - Community Health Integrated Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CHIP is a comprehensive web application for managing community health resources, user registrations, and geographical data management.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend**: React 19 with TypeScript
+- **Build Tool**: Vite
+- **State Management**: Redux Toolkit
+- **Routing**: React Router v7
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Form Handling**: React Hook Form with Zod validation
+- **API Requests**: Axios
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- User authentication (Email/Password and Mobile OTP)
+- Multi-step registration process
+- Geographical data selection (state, division, district, etc.)
+- Dashboard with role-based access
+- Dark/light theme support
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+   ```
+   git clone <repository-url>
+   cd CHIPV2-Web
+   ```
+
+2. Install dependencies
+   ```
+   npm install
+   ```
+
+3. Set up environment variables
+   ```
+   cp .env.example .env
+   ```
+   Edit the `.env` file with your API endpoints
+
+4. Start the development server
+   ```
+   npm run dev
+   ```
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start the development server
+- `npm run build` - Build for production
+- `npm run lint` - Run ESLint
+- `npm run preview` - Preview the production build
+
+### Mock API
+
+The application includes a JSON server mock API for development:
+
+```
+npm run mock-api
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `/src/components` - UI components
+- `/src/features` - Feature-based slices and logic
+- `/src/api` - API clients
+- `/src/hooks` - Custom React hooks
+- `/src/routes` - Application routing
+- `/src/pages` - Top-level page components
+- `/src/lib` - Utility functions
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Environment Variables
+
+Configuration is managed through environment variables:
+
+- `VITE_API_URL` - User authentication API endpoint
+- `VITE_GEO_API_URL` - Geographical data API endpoint
+- `VITE_DEV_MODE` - Enable/disable development features
+- `VITE_APP_ENV` - Application environment (development, staging, production)
+
+## License
+
+[License information]
