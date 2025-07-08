@@ -1,27 +1,49 @@
 import CryptoJS from 'crypto-js';
 
-// Password security utility for hashing passwords before transmission
+// Password security utility for encrypting passwords before transmission
 class PasswordSecurity {
-  // Static salt for consistent hashing (in production, use environment variable)
-  private static readonly SALT = import.meta.env.VITE_PASSWORD_SALT || 'chipv2_default_salt_2024';
+  // Rails secret key base equivalent - should match backend
+  private static readonly SECRET_KEY_BASE = import.meta.env.VITE_SECRET_KEY_BASE || 'chipv2_dev_secret_key_base_2024_secure_development';
   
-  // Hash password with salt before sending to server
+  // Generate 32-byte encryption key (same as Rails backend)
+  private static getEncryptionKey(): CryptoJS.lib.WordArray {
+    return CryptoJS.SHA256(this.SECRET_KEY_BASE).clone();
+  }
+  
+  // Encrypt password using AES-256-CBC (matches Rails backend)
   static hashPassword(password: string): string {
     try {
-      // Combine password with salt and hash using SHA-256
-      const saltedPassword = password + this.SALT;
-      const hashedPassword = CryptoJS.SHA256(saltedPassword).toString();
+      if (!password) {
+        return password;
+      }
       
-      // Add additional PBKDF2 hashing for extra security
-      const finalHash = CryptoJS.PBKDF2(hashedPassword, this.SALT, {
-        keySize: 256 / 32,
-        iterations: 10000
-      }).toString();
+      // Check if encryption is enabled (defaults to true)
+      const encryptionEnabled = import.meta.env.VITE_ENCRYPTION_ENABLED !== 'false';
+      if (!encryptionEnabled) {
+        return password;
+      }
       
-      return finalHash;
+      // Generate random IV (16 bytes)
+      const iv = CryptoJS.lib.WordArray.random(16);
+      
+      // Get encryption key (32 bytes)
+      const key = this.getEncryptionKey();
+      
+      // Encrypt using AES-256-CBC
+      const encrypted = CryptoJS.AES.encrypt(password, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      });
+      
+      // Combine IV + encrypted data
+      const combined = iv.concat(encrypted.ciphertext);
+      
+      // Base64 encode the result
+      return CryptoJS.enc.Base64.stringify(combined);
     } catch (error) {
-      console.error('Password hashing failed:', error);
-      throw new Error('Password hashing failed');
+      console.error('Password encryption failed:', error);
+      throw new Error('Password encryption failed');
     }
   }
   
@@ -55,26 +77,27 @@ class PasswordSecurity {
     };
   }
   
-  // Generate secure random salt (for production use)
-  static generateSalt(): string {
-    return CryptoJS.lib.WordArray.random(256/8).toString();
+  // Generate secure random IV (for encryption)
+  static generateRandomIV(): string {
+    return CryptoJS.lib.WordArray.random(16).toString();
   }
   
-  // Hash password with custom salt (for different users)
-  static hashPasswordWithCustomSalt(password: string, customSalt: string): string {
+  // Test encryption/decryption (for development/testing)
+  static testEncryption(password: string): { encrypted: string; key: string } {
     try {
-      const saltedPassword = password + customSalt + this.SALT;
-      const hashedPassword = CryptoJS.SHA256(saltedPassword).toString();
+      const encrypted = this.hashPassword(password);
+      const key = this.SECRET_KEY_BASE;
       
-      const finalHash = CryptoJS.PBKDF2(hashedPassword, customSalt, {
-        keySize: 256 / 32,
-        iterations: 10000
-      }).toString();
+      console.log('Test encryption:', { 
+        original: password, 
+        encrypted, 
+        keyBase: key.substring(0, 10) + '...' 
+      });
       
-      return finalHash;
+      return { encrypted, key };
     } catch (error) {
-      console.error('Custom password hashing failed:', error);
-      throw new Error('Password hashing failed');
+      console.error('Test encryption failed:', error);
+      throw new Error('Test encryption failed');
     }
   }
 }
