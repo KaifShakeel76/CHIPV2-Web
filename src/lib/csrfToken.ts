@@ -9,9 +9,9 @@ interface CsrfTokenResponse {
 }
 
 
-export const getCsrfToken = async (): Promise<string> => {
-  // Return cached token if available
-  if (csrfTokenCache) {
+export const getCsrfToken = async (forceRefresh: boolean = false): Promise<string> => {
+  // Return cached token if available and not forcing refresh
+  if (csrfTokenCache && !forceRefresh) {
     console.log('🔐 Using cached CSRF token');
     return csrfTokenCache;
   }
@@ -31,8 +31,20 @@ export const getCsrfToken = async (): Promise<string> => {
     } else {
       throw new Error('Invalid CSRF token response format');
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Failed to fetch CSRF token:', error);
+    
+    // Log more details about the error
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+      console.error('Response headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Request was made but no response received:', error.request);
+    } else {
+      console.error('Error setting up request:', error.message);
+    }
+    
     throw new Error('Failed to fetch CSRF token');
   }
 };

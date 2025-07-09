@@ -3,6 +3,7 @@ import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolk
 
 import PasswordSecurity from '@/components/auth/utils/passwordSecurity';
 import { getCsrfToken } from '@/lib/csrfToken';
+import axiosInstance from '@/lib/axiosInstance';
 
 // Types for API responses
 interface LoginRequest {
@@ -199,26 +200,22 @@ export const authApiSlice = createApi({
             encrypted_password: credentials.password
           };
           
-          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
-            method: 'POST',
+          const response = await axiosInstance.post('/auth/login', requestBody, {
             headers: {
-              'Content-Type': 'application/json',
-              'X-API-KEY': import.meta.env.VITE_API_KEY,
               'X-CSRF-Token': csrfToken,
-            },
-            credentials: 'include',
-            body: JSON.stringify(requestBody)
+            }
           });
           
-          const data = await response.json();
-          
-          if (!response.ok) {
-            return { error: { status: response.status, data } };
-          }
-          
-          return { data };
+          return { data: response.data };
         } catch (error: any) {
-          return { error: { status: 'FETCH_ERROR', error: String(error) } };
+          // Handle axios error structure
+          if (error.response) {
+            return { error: { status: error.response.status, data: error.response.data } };
+          } else if (error.request) {
+            return { error: { status: 'FETCH_ERROR', error: 'Network error' } };
+          } else {
+            return { error: { status: 'FETCH_ERROR', error: String(error) } };
+          }
         }
       },
       transformErrorResponse: (response: FetchBaseQueryError) => {

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import { getCsrfToken, clearCsrfToken } from './csrfToken';
 
 // Environment variables - no fallbacks for security
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -14,9 +15,10 @@ if (!API_KEY) {
 }
 
 // Create centralized Axios instance
+
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: import.meta.env.VITE_ENABLE_SESSION_COOKIES === 'true', // Include cookies for session-based auth
+  withCredentials: true, // Always include cookies for CSRF token validation
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -24,6 +26,30 @@ const axiosInstance: AxiosInstance = axios.create({
   },
   timeout: Number(import.meta.env.VITE_API_TIMEOUT) || 10000, // Configurable timeout
 });
+
+// Request interceptor to add CSRF token
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    // Skip CSRF token for GET requests and the CSRF token endpoint itself
+    if (config.method?.toUpperCase() === 'GET' || config.url?.includes('/auth/csrf_token')) {
+      return config;
+    }
+
+    try {
+      const csrfToken = await getCsrfToken(true); // Force fresh token for each request
+      const csrfHeaderName = import.meta.env.VITE_CSRF_HEADER_NAME || 'X-CSRF-Token';
+      config.headers[csrfHeaderName] = csrfToken;
+      console.log('🔐 Added FRESH CSRF token to request:', csrfHeaderName, csrfToken);
+    } catch (error) {
+      console.error('Failed to get CSRF token for request:', error);
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Response interceptor for error handling
 axiosInstance.interceptors.response.use(
@@ -47,8 +73,9 @@ axiosInstance.interceptors.response.use(
           alert('⚠️ Too many requests. Please try again later.');
           break;
         case 403:
-          // Forbidden - CSRF token might be invalid
-          console.error('🚫 Forbidden - CSRF token might be invalid');
+          // Forbidden - CSRF token might be invalid, clear cache and retry
+          console.error('🚫 Forbidden - CSRF token might be invalid, clearing cache');
+          clearCsrfToken();
           break;
         default:
           console.error(`❌ API Error [${status}]:`, error.response.data);

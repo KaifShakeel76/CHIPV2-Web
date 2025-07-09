@@ -2,6 +2,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface OtpState {
+  loadingStates: any;
+  verifiedFields: any;
   otp: string[];
   otpSent: boolean;
   showOtpInput: boolean;
