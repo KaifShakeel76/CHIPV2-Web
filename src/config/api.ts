@@ -13,19 +13,23 @@ const isProduction = import.meta.env.PROD;
 
 // API Configuration
 export const apiConfig: ApiConfig = {
-  // Use local API in development, external in production
+  // Use environment variables without hardcoded fallbacks
   baseUrl: isDevelopment 
-    ? 'https://localhost:3001/api/v1'  // Your local backend
-    : 'https://api.freeapi.app/api/v1', // External API
+    ? (import.meta.env.VITE_DEV_API_BASE_URL || import.meta.env.VITE_LOCAL_BACKEND_URL || (() => {
+        throw new Error('VITE_DEV_API_BASE_URL or VITE_LOCAL_BACKEND_URL environment variable is required for development');
+      })())
+    : (import.meta.env.VITE_PROD_API_BASE_URL || import.meta.env.VITE_EXTERNAL_API_BASE_URL || (() => {
+        throw new Error('VITE_PROD_API_BASE_URL or VITE_EXTERNAL_API_BASE_URL environment variable is required for production');
+      })()),
   
   // Enable mock data fallback in development
-  useMockData: isDevelopment,
+  useMockData: import.meta.env.VITE_USE_MOCK_DATA === 'true' || isDevelopment,
   
   // Timeout settings
-  timeout: 10000, // 10 seconds
+  timeout: Number(import.meta.env.VITE_API_TIMEOUT) || 10000, // 10 seconds
   
   // Retry attempts for failed requests
-  retryAttempts: 2,
+  retryAttempts: Number(import.meta.env.VITE_API_RETRY_ATTEMPTS) || 2,
 };
 
 // Mock data for development

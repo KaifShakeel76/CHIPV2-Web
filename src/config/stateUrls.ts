@@ -7,17 +7,23 @@ export interface StateUrlConfig {
 
 export const stateUrlConfigs: Record<string, StateUrlConfig> = {
   KA: {
-    baseUrl: import.meta.env.VITE_KA_API_URL || 'https://api-ka.chipv2.com/api/v1',
+    baseUrl: import.meta.env.VITE_KA_API_URL || (() => {
+      throw new Error('VITE_KA_API_URL environment variable is required');
+    })(),
     stateCode: 'KA',
     stateName: 'Karnataka'
   },
   MH: {
-    baseUrl: import.meta.env.VITE_MH_API_URL || 'https://api-mh.chipv2.com/api/v1',
+    baseUrl: import.meta.env.VITE_MH_API_URL || (() => {
+      throw new Error('VITE_MH_API_URL environment variable is required');
+    })(),
     stateCode: 'MH', 
     stateName: 'Maharashtra'
   },
   RJ: {
-    baseUrl: import.meta.env.VITE_RJ_API_URL || 'https://api-rj.chipv2.com/api/v1',
+    baseUrl: import.meta.env.VITE_RJ_API_URL || (() => {
+      throw new Error('VITE_RJ_API_URL environment variable is required');
+    })(),
     stateCode: 'RJ',
     stateName: 'Rajasthan'
   }
@@ -26,7 +32,10 @@ export const stateUrlConfigs: Record<string, StateUrlConfig> = {
 // Get base URL for specific state
 export const getStateBaseUrl = (stateCode: string): string => {
   const config = stateUrlConfigs[stateCode.toUpperCase()];
-  return config?.baseUrl || stateUrlConfigs.KA.baseUrl; // Fallback to Karnataka
+  if (!config) {
+    throw new Error(`No configuration found for state: ${stateCode}. Available states: ${Object.keys(stateUrlConfigs).join(', ')}`);
+  }
+  return config.baseUrl;
 };
 
 // Auto-detect state from deployment URL or environment

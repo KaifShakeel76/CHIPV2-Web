@@ -1,16 +1,15 @@
 "use client"
 
-import { memo, useCallback } from "react"
+import { memo, useCallback, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 
 import { useLoginFormValidation } from "@/components/auth/hooks/useFormValidation"
 import { emailLoginSchema, type EmailLoginForm } from "@/components/auth/schemas/validationSchemas"
-import { useLoginWithEmailMutation } from "@/features/auth/authApiSlice"
 import { handleApiError } from "@/lib/errorHandling"
-import PasswordSecurity from "@/components/auth/utils/passwordSecurity"
 import EmailInputField from "@/components/shared/EmailInputField"
 import PasswordInputField from "@/components/shared/PasswordInputField"
+import { useLoginWithEmailMutation } from "@/features/auth/authApiSlice"
 
 interface EmailLoginProps {
   onForgotPassword: () => void
@@ -18,9 +17,8 @@ interface EmailLoginProps {
 
 const EmailLogin = memo(function EmailLogin({ onForgotPassword }: EmailLoginProps) {
   const navigate = useNavigate()
-  
-  // RTK Query mutation for login
-  const [loginWithEmail, { isLoading }] = useLoginWithEmailMutation()
+  const [isLoading, setIsLoading] = useState(false)
+  const [loginWithEmail] = useLoginWithEmailMutation()
   
   // Use optimized form validation hook
   const {
@@ -43,12 +41,11 @@ const EmailLogin = memo(function EmailLogin({ onForgotPassword }: EmailLoginProp
   // Optimized submission handler
   const onSubmit = useCallback(async (data: EmailLoginForm) => {
     try {
-      // Hash password before sending over network for security
-      const hashedPassword = PasswordSecurity.hashPassword(data.password)
+      setIsLoading(true)
       
       const response = await loginWithEmail({
         email: data.email,
-        password: hashedPassword,
+        password: data.password,
       }).unwrap()
 
       // RTK Query automatically handles Redux state via authSlice matchers
@@ -94,6 +91,8 @@ const EmailLogin = memo(function EmailLogin({ onForgotPassword }: EmailLoginProp
       
     } catch (error) {
       handleApiError(error, 'login')
+    } finally {
+      setIsLoading(false)
     }
   }, [loginWithEmail, navigate])
 
@@ -193,3 +192,4 @@ const EmailLogin = memo(function EmailLogin({ onForgotPassword }: EmailLoginProp
 })
 
 export default EmailLogin
+
