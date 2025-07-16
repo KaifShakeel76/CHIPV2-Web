@@ -24,6 +24,10 @@ export const getCsrfToken = async (forceRefresh: boolean = false): Promise<strin
     
     const response = await axiosInstance.get<CsrfTokenResponse>(csrfEndpoint);
     
+    console.log('🍪 CSRF Response Headers:', response.headers);
+    console.log('🍪 Set-Cookie headers:', response.headers['set-cookie']);
+    console.log('🍪 Current cookies after CSRF request:', document.cookie);
+    
     if (response.data && response.data.csrf_token) {
       csrfTokenCache = response.data.csrf_token;
       console.log('✅ CSRF token fetched and cached successfully');

@@ -14,9 +14,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: process.env.VITE_BACKEND_BASE_URL || 'http://localhost:3000',
         changeOrigin: true,
-        secure: false,
+        secure: process.env.VITE_BACKEND_BASE_URL?.startsWith('https') ? true : false,
       }
     }
   }

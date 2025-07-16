@@ -9,7 +9,7 @@ import { useAppDispatch } from "@/hooks/reduxHooks"
 import { setOtpSent } from "@/features/auth/loginTabSlice"
 
 import { CheckCircle } from "lucide-react"
-import { useVerifyOtpMutation, useSendOtpMutation, createOtpRequest } from "@/features/auth/authApiSlice"
+import { useVerifyOtpMutation, useSendOtpMutation, useResendOtpMutation, createOtpRequest } from "@/features/auth/authApiSlice"
 import EmailInputField from "@/components/shared/EmailInputField"
 import PhoneInputField from "@/components/shared/PhoneInputField"
 
@@ -74,6 +74,7 @@ export function OtpSection({
   // RTK Query hooks - ready for API integration  
   const [verifyOtp, { isLoading: isOtpVerifying }] = useVerifyOtpMutation()
   const [sendOtp, { isLoading: isSendingOtp }] = useSendOtpMutation()
+  const [resendOtp, { isLoading: isResendingOtp }] = useResendOtpMutation()
 
   // Helper function to clear OTP and refocus input
   const clearOtpAndRefocus = () => {
@@ -101,7 +102,8 @@ export function OtpSection({
       
       try {
         // Context-based OTP verification
-        const otpId = localStorage.getItem('otpId') || 'stored_otp_id'
+        // TODO: Use actual otpId from backend when available
+        const otpId = localStorage.getItem('otpId') || 'temp_otp_id'
         const context = mode === "login" ? "login" : "registration"
         
         // Using RTK Query with Rate Limiting Support
@@ -109,7 +111,8 @@ export function OtpSection({
           otpId, 
           otp: fullOtp, 
           type, 
-          context: context as 'registration' | 'login' | 'forgot-password'
+          context: context as 'registration' | 'login' | 'forgot-password',
+          [type]: value // Add mobile/email/whatsapp based on type
         }
         
         const response = await verifyOtp(verifyRequest).unwrap()
@@ -357,30 +360,17 @@ export function OtpSection({
       // ✅ Context-based OTP sending with context included
       const context = mode === "login" ? "login" : "registration"
       
-      // TODO: Uncomment when API is ready
-      // const otpRequest = createOtpRequest(type, value, context)
-      // const response = await sendOtp(otpRequest).unwrap()
+      // Real API implementation
+      const otpRequest = createOtpRequest(type, value, context)
+      const response = await sendOtp(otpRequest).unwrap()
+      // TODO: Implement otpId storage when backend provides it
       // localStorage.setItem('otpId', response.otpId)
-      // console.log('✅ Send OTP Response:', response)
-
-      // MOCK IMPLEMENTATION - Remove when API is ready
-      await new Promise(resolve => setTimeout(resolve, 300))
-      
-      const mockSendOtpResponse = {
-        success: true,
-        message: `${context.charAt(0).toUpperCase() + context.slice(1)} OTP sent successfully`,
-        otpId: `mock_${context}_otp_${Date.now()}_${value}`
-      }
-      
-      // Store mock otpId for verification
-      localStorage.setItem('otpId', mockSendOtpResponse.otpId)
-      
-      console.log(`📤 Mock ${context.charAt(0).toUpperCase() + context.slice(1)} Send OTP Response:`, mockSendOtpResponse)
+      console.log('✅ Send OTP Response:', response)
       
       setShowOtpInput(true)
       setOtp(Array(6).fill(""))
       setResendTrigger((prev) => prev + 1)
-      toast.success(mockSendOtpResponse.message)
+      toast.success(response.message)
       
     } catch (error: any) {
       console.error('Send OTP error:', error)
@@ -436,6 +426,17 @@ export function OtpSection({
       } else {
         toast.error(error.data?.message || `Failed to send ${context} OTP. Please try again.`)
       }
+    }
+  }
+
+  const handleResendOTP = async () => {
+    try {
+      const response = await resendOtp({ type }).unwrap()
+      setResendTrigger((prev) => prev + 1)
+      toast.success(response.message || 'OTP resent successfully')
+    } catch (error: any) {
+      console.error('Resend OTP error:', error)
+      toast.error(error.data?.message || 'Failed to resend OTP. Please try again.')
     }
   }
 
@@ -572,9 +573,9 @@ export function OtpSection({
             </span>
           ) : canResend ? (
             <button 
-              onClick={handleSendOTP} 
+              onClick={handleResendOTP} 
               className="hover:underline text-accent"
-              disabled={isVerifying || isOtpVerifying || isSendingOtp}
+              disabled={isVerifying || isOtpVerifying || isSendingOtp || isResendingOtp}
             >
               Resend OTP
             </button>
@@ -620,8 +621,8 @@ export function OtpSection({
               </span>
             ) : canResend ? (
               <button 
-                onClick={handleSendOTP} 
-                disabled={isSendingOtp}
+                onClick={handleResendOTP} 
+                disabled={isSendingOtp || isResendingOtp}
                 className="hover:underline text-accent"
               >
                 Resend OTP

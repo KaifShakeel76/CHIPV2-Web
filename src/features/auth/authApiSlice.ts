@@ -32,6 +32,33 @@ interface LoginResponse {
   };
 }
 
+interface RegisterRequest {
+  email: string;
+  first_name: string;
+  last_name: string;
+  mobile: string;
+  whatsapp_number: string;
+  geography_type: string;
+  geography_id: string;
+  org: string;
+  password: string;
+}
+
+interface RegisterResponse {
+  message: string;
+  user: {
+    id: string;
+    email: string;
+    full_name: string;
+    mobile: string;
+    whatsapp_number: string;
+    geography_type: string;
+    geography_id: string;
+    org: string;
+    created_at: string;
+  };
+}
+
 interface OtpRequest {
   mobile?: string;
   email?: string;
@@ -65,6 +92,9 @@ interface VerifyOtpRequest {
   otpId: string;
   otp: string;
   type: 'mobile' | 'email' | 'whatsapp';
+  mobile?: string;
+  email?: string;
+  whatsapp?: string;
 }
 
 interface VerifyOtpResponse {
@@ -108,8 +138,11 @@ const baseQueryWithRetry: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
+  const baseUrl = `${import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:3000'}/${import.meta.env.VITE_BACKEND_API_VERSION || 'v1'}`;
+  console.log('🌐 RTK Query Base URL:', baseUrl);
+  
   const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://a13797edace6744e9aaac6eb088b75ca-270168266.ap-south-1.elb.amazonaws.com:3000/v1',
+    baseUrl,
     credentials: 'include',  // Include session cookies
     prepareHeaders: (headers, { getState }) => {
       headers.set('Content-Type', 'application/json');
@@ -118,8 +151,11 @@ const baseQueryWithRetry: BaseQueryFn<
       // Add API key if available
       const apiKey = import.meta.env.VITE_API_KEY;
       const apiKeyHeader = import.meta.env.VITE_API_KEY_HEADER_NAME || 'X-API-KEY';
+      console.log('🔑 API Key Debug:', { apiKey: apiKey ? 'Present' : 'Missing', header: apiKeyHeader });
       if (apiKey) {
         headers.set(apiKeyHeader, apiKey);
+      } else {
+        console.warn('⚠️ VITE_API_KEY environment variable is missing');
       }
       
       headers.set('User-Agent', 'CHIPV2-Frontend/1.0');
@@ -265,14 +301,150 @@ export const authApiSlice = createApi({
       invalidatesTags: ['User', 'Session'],
     }),
 
+    // Register User
+    register: builder.mutation<RegisterResponse, RegisterRequest>({
+      queryFn: async (userData) => {
+        try {
+          // Hash password before sending
+          const hashedPassword = PasswordSecurity.hashPassword(userData.password);
+          
+          // Create full_name by concatenating first and last name
+          const full_name = `${userData.first_name} ${userData.last_name}`;
+          
+          const requestBody = {
+            email: userData.email,
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            full_name: full_name,
+            mobile: userData.mobile,
+            whatsapp_number: userData.whatsapp_number,
+            geography_type: userData.geography_type,
+            geography_id: userData.geography_id,
+            org: userData.org,
+            encrypted_password: hashedPassword,
+          };
+          
+          const apiUrl = `${import.meta.env.VITE_BACKEND_BASE_URL}/${import.meta.env.VITE_BACKEND_API_VERSION}`;
+          
+          console.log('🚀 Registration API Request:', {
+            url: `${apiUrl}/auth/register`,
+            body: requestBody,
+            cookies: document.cookie,
+            sessionCookies: document.cookie.split(';').filter(c => c.trim().startsWith('_session') || c.trim().startsWith('session'))
+          });
+          
+          // Try without CSRF token first, then with it if needed
+          console.log('🔄 Attempting registration without CSRF token...');
+          
+          try {
+            const response = await axiosInstance.post('/auth/register', requestBody, {
+              // Skip CSRF token for this attempt
+              headers: {
+                'Skip-CSRF': 'true'
+              }
+            });
+            return { data: response.data };
+          } catch (noCsrfError: any) {
+            console.log('❌ Registration failed without CSRF, trying with CSRF token...');
+            
+            // If no CSRF fails, try with CSRF token
+            const csrfToken = await getCsrfToken(true);
+            const response = await axiosInstance.post('/auth/register', requestBody, {
+              headers: {
+                'X-CSRF-Token': csrfToken,
+              }
+            });
+            return { data: response.data };
+          }
+          
+          return { data: response.data };
+        } catch (error: any) {
+          console.error('❌ Registration Error:', error);
+          
+          // Handle axios error structure
+          if (error.response) {
+            return { error: { status: error.response.status, data: error.response.data } };
+          } else if (error.request) {
+            return { error: { status: 'FETCH_ERROR', error: 'Network error' } };
+          } else {
+            return { error: { status: 'FETCH_ERROR', error: String(error) } };
+          }
+        }
+      },
+      transformErrorResponse: (response: FetchBaseQueryError) => {
+        const data = response.data as any;
+        
+        console.error('❌ Registration API Error:', {
+          status: response.status,
+          data: data,
+          fullResponse: response
+        });
+        
+        let message = data?.error || data?.message || data?.errors;
+        
+        if (!message) {
+          if (response.status === 400) {
+            message = 'Invalid registration data. Please check all required fields.';
+          } else if (response.status === 409) {
+            message = 'User already exists with this email or mobile number.';
+          } else if (response.status === 422) {
+            message = 'Validation failed. Please check your input data.';
+          } else if (response.status === 500) {
+            message = 'Server error during registration. Please try again.';
+          } else {
+            message = 'Registration failed. Please try again.';
+          }
+        }
+        
+        return {
+          status: response.status,
+          message,
+          originalError: response
+        };
+      },
+      invalidatesTags: ['User', 'Session'],
+    }),
 
     // Send OTP - Enhanced with comprehensive error handling
     sendOtp: builder.mutation<OtpResponse, OtpRequest>({
-      query: ({ type, ...data }) => ({
-        url: `/auth/send-otp/${type}`,
-        method: 'POST',
-        body: data,
-      }),
+      query: ({ type, ...data }) => {
+        const endpointMap = {
+          mobile: '/mob_otps',
+          whatsapp: '/wa_otps',
+          email: '/email_otps'
+        };
+        
+        // Prepare request body based on type
+        const requestBody: any = {};
+        if (type === 'mobile' && data.mobile) {
+          requestBody.mobile = data.mobile;
+        } else if (type === 'whatsapp' && data.whatsapp) {
+          requestBody.mobile = data.whatsapp; // WhatsApp uses mobile number
+        } else if (type === 'email' && data.email) {
+          requestBody.email = data.email;
+        }
+        
+        return {
+          url: endpointMap[type],
+          method: 'POST',
+          body: requestBody,
+        };
+      },
+      
+      // Transform response to handle null responses from 204 status
+      transformResponse: (response: any, meta: any) => {
+        // Handle 204 No Content response (null)
+        if (meta?.response?.status === 204 || response === null) {
+          return {
+            success: true,
+            message: 'OTP sent successfully',
+            timestamp: new Date().toISOString()
+          };
+        }
+        
+        // Handle actual backend response
+        return response;
+      },
       
       // ENHANCED: Transform server errors with proper handling
       transformErrorResponse: (response: FetchBaseQueryError) => {
@@ -314,33 +486,52 @@ export const authApiSlice = createApi({
 
     // Verify OTP
     verifyOtp: builder.mutation<VerifyOtpResponse, VerifyOtpRequest>({
-      // TODO: Uncomment this when API is ready
-      // query: (data) => ({
-      //   url: `/auth/verify-otp`,
-      //   method: 'POST',
-      //   body: data,
-      // }),
-      // transformResponse: (response: any) => ({
-      //   success: response.success || false,
-      //   verified: response.verified || false,
-      //   message: response.message || 'Verification completed',
-      //   // Include authentication data only for login context
-      //   ...(response.user && { user: response.user }),
-      //   ...(response.token && { token: response.token }),
-      //   ...(response.refreshToken && { refreshToken: response.refreshToken }),
-      //   // Rate limiting fields
-      //   ...(response.attemptsRemaining !== undefined && { attemptsRemaining: response.attemptsRemaining }),
-      //   ...(response.maxAttempts && { maxAttempts: response.maxAttempts }),
-      //   ...(response.error && { error: response.error }),
-      //   ...(response.retryAfter && { retryAfter: response.retryAfter }),
-      //   ...(response.lockExpiresAt && { lockExpiresAt: response.lockExpiresAt }),
-      //   ...(response.waitTimeSeconds && { waitTimeSeconds: response.waitTimeSeconds }),
-      //   // 410 OTP Expired fields
-      //   ...(response.expiryTime && { expiryTime: response.expiryTime }),
-      // }),
+      query: ({ type, ...data }) => {
+        const endpointMap = {
+          mobile: '/mob_otps/verify',
+          whatsapp: '/wa_otps/verify',
+          email: '/email_otps/verify'
+        };
+
+        // Prepare request body based on type
+        const requestBody: any = {
+          otp: data.otp // Always include OTP
+        };
+        
+        if (type === 'mobile' && data.mobile) {
+          requestBody.mobile = data.mobile;
+        } else if (type === 'whatsapp' && data.whatsapp) {
+          requestBody.mobile = data.whatsapp; // WhatsApp uses mobile number
+        } else if (type === 'email' && data.email) {
+          requestBody.email = data.email;
+        }
+        
+        console.log('🔍 Verify OTP Request Body:', requestBody);
+        
+        return {
+          url: endpointMap[type],
+          method: 'POST',
+          body: requestBody,
+        };
+      },
+      transformResponse: (response: any) => ({
+        success: response.success || true,
+        verified: response.verified || true,
+        message: response.message || 'OTP verified successfully',
+        contactMethod: response.contactMethod || 'mobile',
+        // Rate limiting fields (if provided by backend)
+        ...(response.attemptsRemaining !== undefined && { attemptsRemaining: response.attemptsRemaining }),
+        ...(response.maxAttempts && { maxAttempts: response.maxAttempts }),
+        ...(response.error && { error: response.error }),
+        ...(response.retryAfter && { retryAfter: response.retryAfter }),
+        ...(response.lockExpiresAt && { lockExpiresAt: response.lockExpiresAt }),
+        ...(response.waitTimeSeconds && { waitTimeSeconds: response.waitTimeSeconds }),
+        // 410 OTP Expired fields
+        ...(response.expiryTime && { expiryTime: response.expiryTime }),
+      }),
 
       // MOCK IMPLEMENTATION with Rate Limiting - Remove when API is ready
-      queryFn: async (data) => {
+      /* queryFn: async (data) => {
         console.log('🔐 Mock OTP Verification - Request:', data);
         
         // Simulate API delay
@@ -461,10 +652,41 @@ export const authApiSlice = createApi({
         
         console.log('✅ Mock OTP Verification Success:', mockResponse);
         return { data: mockResponse };
-      },
+      }, */
       
       invalidatesTags: (_result, error, arg) => 
         arg.context === 'login' && !error ? ['User', 'Session'] : [],
+    }),
+
+    // Resend OTP
+    resendOtp: builder.mutation<OtpResponse, { type: 'mobile' | 'whatsapp' | 'email' }>({
+      query: ({ type }) => {
+        const endpointMap = {
+          mobile: '/mob_otps/resend',
+          whatsapp: '/wa_otps/resend',
+          email: '/email_otps/resend'
+        };
+        return {
+          url: endpointMap[type],
+          method: 'POST',
+          body: {},
+        };
+      },
+      transformErrorResponse: (response: FetchBaseQueryError) => {
+        const serverData = (response.data as any) || {};
+        const status = response.status;
+        
+        return {
+          status,
+          data: {
+            success: false,
+            message: serverData.message || getDefaultSendOtpErrorMessage(status),
+            error: serverData.error || getDefaultSendOtpErrorCode(status),
+            ...(serverData.retryAfter && { retryAfter: serverData.retryAfter }),
+            timestamp: new Date().toISOString(),
+          }
+        };
+      },
     }),
 
     // Forgot Password
@@ -510,8 +732,10 @@ export const authApiSlice = createApi({
 // Export hooks for use in components
 export const {
   useLoginWithEmailMutation,
+  useRegisterMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
+  useResendOtpMutation,
   useForgotPasswordMutation,
   useLogoutMutation,
   useGetCurrentUserQuery,
@@ -538,6 +762,38 @@ export const createOtpRequest = (
   [type]: value,
   context,
 });
+
+// Utility function to map registration form state to API format
+export const mapRegistrationFormToAPI = (formState: any): RegisterRequest => ({
+  email: formState.contactInfo.email,
+  first_name: formState.personalInfo.firstName,
+  last_name: formState.personalInfo.lastName || '',
+  mobile: formState.contactInfo.mobileNumber,
+  whatsapp_number: formState.contactInfo.whatsappNumber,
+  geography_type: formState.levelInfo.selectedLevel.toLowerCase(),
+  geography_id: getGeographyId(formState.levelInfo),
+  org: formState.levelInfo.organizationLabel || formState.levelInfo.organizationId,
+  password: formState.personalInfo.password,
+});
+
+// Helper function to get the appropriate geography ID based on selected level
+const getGeographyId = (levelInfo: any): string => {
+  const level = levelInfo.selectedLevel.toLowerCase();
+  switch (level) {
+    case 'state':
+      return levelInfo.state;
+    case 'division':
+      return levelInfo.division;
+    case 'district':
+      return levelInfo.district;
+    case 'block':
+      return levelInfo.block;
+    case 'sector':
+      return levelInfo.sector;
+    default:
+      return levelInfo.state || '';
+  }
+};
 
 export const createVerifyOtpRequest = (
   otpId: string,

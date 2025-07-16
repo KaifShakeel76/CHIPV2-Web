@@ -36,7 +36,8 @@ const baseQueryWithRetry: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+
+    baseUrl: `${import.meta.env.VITE_BACKEND_BASE_URL}/${import.meta.env.VITE_BACKEND_API_VERSION}`,
     prepareHeaders: (headers) => {
       headers.set('Accept', 'application/json');
       

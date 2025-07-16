@@ -20,6 +20,7 @@ import RegistrationSkeleton from "./RegistrationSkeleton"
 
 import { useDispatch, useSelector } from "react-redux"
 import { setStep, resetForm } from "@/features/registerForm/registerFormSlice"
+import { useRegisterMutation, mapRegistrationFormToAPI } from "@/features/auth/authApiSlice"
 import { 
   selectRegistrationStep, 
   selectContactVerification, 
@@ -62,6 +63,9 @@ function OptimizedRegistrationDrawer({ open, onOpenChange }: RegisterDrawerProps
   const canProceedStep1 = useSelector(selectCanProceedStep1)
   const canProceedStep2 = useSelector(selectCanProceedStep2)
   const canProceedStep3 = useSelector(selectCanProceedStep3)
+  
+  // Registration API mutation
+  const [registerUser, { isLoading: isRegistering, error: registrationError }] = useRegisterMutation()
 
   // Fast initialization when drawer opens
   useEffect(() => {
@@ -138,22 +142,52 @@ function OptimizedRegistrationDrawer({ open, onOpenChange }: RegisterDrawerProps
     if (step > 1) dispatch(setStep(step - 1))
   }, [step, dispatch])
 
-  const handleApprovalSubmit = useCallback(() => {
-    const secureReviewInfo = {
-      ...reviewInfoMemoized,
-      password: reviewInfoMemoized.password ? PasswordSecurity.hashPassword(reviewInfoMemoized.password) : reviewInfoMemoized.password,
-      // Don't hash confirmPassword - it's not sent to server
-    }
-    
-    console.log("✅ Submitting registration:", secureReviewInfo)
-    localStorage.setItem("userRegistrationData", JSON.stringify(secureReviewInfo))
-
-    setTimeout(() => {
+  const handleApprovalSubmit = useCallback(async () => {
+    try {
+      console.log("✅ Submitting registration:", reviewInfoMemoized)
+      
+      // Create the full form state to map to API format
+      const fullFormState = {
+        contactInfo,
+        levelInfo,
+        personalInfo: {
+          ...personalInfo,
+          password: reviewInfoMemoized.password,
+          confirmPassword: reviewInfoMemoized.confirmPassword
+        }
+      }
+      
+      // Map form state to API format
+      const apiData = mapRegistrationFormToAPI(fullFormState)
+      
+      console.log("🚀 Registration API Data:", apiData)
+      
+      // Call the registration API
+      const result = await registerUser(apiData).unwrap()
+      
+      console.log("✅ Registration successful:", result)
+      toast.success("Registration successful! Please check your email for verification.")
+      
+      // Clean up and close
       dispatch(resetForm())
       localStorage.removeItem("userRegistrationData")
       onOpenChange(false)
-    }, 300)
-  }, [reviewInfoMemoized, dispatch, onOpenChange])
+      
+    } catch (error: any) {
+      console.error("❌ Registration failed:", error)
+      
+      // Handle specific error cases
+      if (error.status === 409) {
+        toast.error("User already exists with this email or mobile number.")
+      } else if (error.status === 422) {
+        toast.error("Please check your input data and try again.")
+      } else if (error.message) {
+        toast.error(error.message)
+      } else {
+        toast.error("Registration failed. Please try again.")
+      }
+    }
+  }, [reviewInfoMemoized, contactInfo, levelInfo, personalInfo, registerUser, dispatch, onOpenChange])
 
   // Memoized step components to prevent unnecessary re-renders
   const stepComponents = useMemo(() => ({
@@ -218,6 +252,7 @@ function OptimizedRegistrationDrawer({ open, onOpenChange }: RegisterDrawerProps
                       Object.entries(reviewInfoMemoized).map(([k, v]) => [k, String(v)])
                     )}
                     onSubmit={handleApprovalSubmit}
+                    isLoading={isRegistering}
                   />
                 </div>
               )}

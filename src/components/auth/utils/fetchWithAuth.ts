@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || '';
+const API_VERSION = import.meta.env.VITE_BACKEND_API_VERSION || 'v1';
+const API_BASE_URL = `${BACKEND_BASE_URL}/${API_VERSION}`;
 
 interface FetchWithAuthOptions extends RequestInit {
   baseUrl?: string;

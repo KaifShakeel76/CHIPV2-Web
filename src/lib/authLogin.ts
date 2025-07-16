@@ -100,7 +100,7 @@ export const emailLogin = async (credentials: LoginCredentials): Promise<LoginRe
  */
 export const checkUserApprovalStatus = async (userId: string, token: string) => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/user-details/${userId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/${import.meta.env.VITE_API_VERSION}/auth/user-details/${userId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import {
   Dialog,
   DialogContent,
@@ -16,33 +15,32 @@ import { toast } from "sonner"
 interface ApprovalDialogProps {
   reviewInfo: Record<string, string>
   onSubmit: () => void
+  isLoading?: boolean
 }
 
-export function ApprovalDialog({ onSubmit, reviewInfo }: ApprovalDialogProps)
+export function ApprovalDialog({ onSubmit, reviewInfo, isLoading = false }: ApprovalDialogProps)
 {
   const [open, setOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const navigate = useNavigate()
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setSubmitted(true)
-    toast.success("Sent for Approval ✅")
-
-    // 🟡 Save to localStorage
-
-    localStorage.setItem("userRegistrationData", JSON.stringify(reviewInfo))
-    // 🟢 Placeholder for future API call
-    // await submitUserToAPI(reviewInfo)
-
-    onSubmit?.()
-    navigate("/user-details")
+    
+    // Call the actual registration API
+    await onSubmit?.()
+    
+    // Close the dialog
+    setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
          <DialogTrigger asChild>
-      <Button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base py-2 px-3 sm:px-4 h-auto">
-        Send for Approval
+      <Button 
+        className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base py-2 px-3 sm:px-4 h-auto"
+        disabled={isLoading}
+      >
+        {isLoading ? "Submitting..." : "Send for Approval"}
       </Button>
     </DialogTrigger>
       <DialogContent className="sm:max-w-md text-center">
@@ -61,8 +59,12 @@ export function ApprovalDialog({ onSubmit, reviewInfo }: ApprovalDialogProps)
               >
                 Cancel
               </Button>
-              <Button onClick={handleConfirm} className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Submit
+              <Button 
+                onClick={handleConfirm} 
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                disabled={isLoading}
+              >
+                {isLoading ? "Submitting..." : "Submit"}
               </Button>
             </DialogFooter>
           </>
