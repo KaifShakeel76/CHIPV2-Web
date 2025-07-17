@@ -88,8 +88,9 @@ const makeSecureRequest = async <T>(
 export const registerUser = async (userData: RegisterData): Promise<AuthResponse> => {
   try {
     console.log('📝 Registering user...', { email: userData.email });
-    
-    const response = await makeSecureRequest<AuthResponse>('POST', import.meta.env.VITE_AUTH_REGISTER_ENDPOINT || '/auth/register', userData);
+    // Wrap userData inside a 'user' object to match the backend
+    const payload = { user: userData };
+    const response = await makeSecureRequest<AuthResponse>('POST', import.meta.env.VITE_AUTH_REGISTER_ENDPOINT || '/auth/register', payload);
     
     console.log('✅ User registration successful');
     return response.data;

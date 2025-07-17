@@ -231,9 +231,12 @@ export const authApiSlice = createApi({
         try {
           const csrfToken = await getCsrfToken();
           
+          // Hash password before sending
+          const hashedPassword = PasswordSecurity.hashPassword(credentials.password);
+          
           const requestBody = {
             email: credentials.email?.trim().toLowerCase(),
-            encrypted_password: credentials.password
+            encrypted_password: hashedPassword
           };
           
           const response = await axiosInstance.post('/auth/login', requestBody, {

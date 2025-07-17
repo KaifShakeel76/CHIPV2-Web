@@ -4,7 +4,7 @@ import axios from "axios"
 const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:3000"
 const BACKEND_API_VERSION = import.meta.env.VITE_BACKEND_API_VERSION || "v1"
 const BASE_URL = `${BACKEND_BASE_URL}/${BACKEND_API_VERSION}`
-const API_KEY = import.meta.env.VITE_API_KEY || "422e7c9463d2fe62b2804985cfff0d153b070a2f3d9bfd5d21c92013aba4fd74"
+const API_KEY = import.meta.env.VITE_API_KEY
 
 // Configure axios with required headers for Rails API
 const apiClient = axios.create({
