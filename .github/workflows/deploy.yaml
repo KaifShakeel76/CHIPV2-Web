@@ -1,11 +1,11 @@
-name: ACS EKS deployment
+name: chipv2 web EKS deployment
 
 on:
   workflow_dispatch:
 
 env:
   AWS_REGION: ap-south-1
-  ECR_REPOSITORY: acs-dash
+  ECR_REPOSITORY: chipv2-web
   KUBE_NAMESPACE: chip
   GITHUB_SHA: ${{ github.sha }}
 
